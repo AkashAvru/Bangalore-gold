@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <title>Bangalore Gold</title>
+  <meta name="description" content="Live 22K & 24K gold rates for Bangalore with daily, weekly and monthly history." />
+
+  <!-- PWA / iOS home-screen -->
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="theme-color" content="#12100b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Gold" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="title">
+        <h1>Bangalore Gold</h1>
+        <div class="sub" id="statusLine">
+          <span class="dot" id="liveDot"></span>
+          <span id="updatedText">Loading…</span>
+        </div>
+      </div>
+      <button class="refresh" id="refreshBtn" aria-label="Refresh">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7Z"/></svg>
+      </button>
+    </header>
+
+    <!-- Unit + live toggles -->
+    <div class="controls">
+      <div class="seg" id="unitSeg" role="group" aria-label="Unit">
+        <button class="seg-btn active" data-unit="g">per gram</button>
+        <button class="seg-btn" data-unit="10">per 10 g</button>
+      </div>
+      <label class="live-toggle">
+        <input type="checkbox" id="liveToggle" />
+        <span>Live estimate</span>
+      </label>
+    </div>
+
+    <!-- Price cards -->
+    <section class="cards">
+      <article class="card" id="card24">
+        <div class="card-head"><span class="karat">24K</span><span class="purity">99.9% pure</span></div>
+        <div class="price" id="price24">—</div>
+        <div class="unit-lbl" id="unit24">₹ / gram</div>
+        <div class="delta" id="delta24"></div>
+        <div class="live-row" id="live24" hidden></div>
+      </article>
+      <article class="card" id="card22">
+        <div class="card-head"><span class="karat">22K</span><span class="purity">91.6% • jewellery</span></div>
+        <div class="price" id="price22">—</div>
+        <div class="unit-lbl" id="unit22">₹ / gram</div>
+        <div class="delta" id="delta22"></div>
+        <div class="live-row" id="live22" hidden></div>
+      </article>
+    </section>
+
+    <!-- Change summary -->
+    <section class="summary" id="summary">
+      <div class="sum-item"><span class="sum-k">Today</span><span class="sum-v" id="sumDay">—</span></div>
+      <div class="sum-item"><span class="sum-k">1 Week</span><span class="sum-v" id="sumWeek">—</span></div>
+      <div class="sum-item"><span class="sum-k">1 Month</span><span class="sum-v" id="sumMonth">—</span></div>
+    </section>
+
+    <!-- Chart -->
+    <section class="chart-card">
+      <div class="chart-head">
+        <div class="seg small" id="metalSeg" role="group" aria-label="Metal">
+          <button class="seg-btn active" data-metal="24">24K</button>
+          <button class="seg-btn" data-metal="22">22K</button>
+        </div>
+        <div class="seg small" id="rangeSeg" role="group" aria-label="Range">
+          <button class="seg-btn" data-range="7">1W</button>
+          <button class="seg-btn active" data-range="30">1M</button>
+          <button class="seg-btn" data-range="90">3M</button>
+          <button class="seg-btn" data-range="0">All</button>
+        </div>
+      </div>
+      <div class="chart-body">
+        <svg id="chart" viewBox="0 0 340 180" preserveAspectRatio="none" aria-label="Price history chart"></svg>
+        <div class="chart-tip" id="chartTip" hidden></div>
+      </div>
+      <div class="chart-foot" id="chartFoot"></div>
+    </section>
+
+    <!-- Spot indicator -->
+    <section class="spot" id="spotBox" hidden>
+      <span class="spot-lbl">International spot (24K)</span>
+      <span class="spot-val" id="spotVal">—</span>
+      <span class="spot-note">≈ before duty &amp; GST</span>
+    </section>
+
+    <!-- History list -->
+    <section class="history">
+      <h2>Daily history</h2>
+      <div class="hist-list" id="histList"></div>
+    </section>
+
+    <footer class="foot">
+      <div>Source: <a id="srcLink" href="https://www.goodreturns.in/gold-rates/bangalore.html" target="_blank" rel="noopener">GoodReturns · Bangalore</a></div>
+      <div class="disclaimer">Retail rates for reference only. Live estimate is interpolated from international spot between official updates.</div>
+    </footer>
+  </div>
+
+  <!-- iOS install hint -->
+  <div class="install-hint" id="installHint" hidden>
+    <div class="ih-body">
+      <strong>Add to Home Screen</strong>
+      <p>Tap <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 3l4 4h-3v7h-2V7H8l4-4zM5 12h2v7h10v-7h2v9H5v-9z"/></svg> Share, then <em>“Add to Home Screen”</em> to use this like an app.</p>
+    </div>
+    <button id="installClose" aria-label="Dismiss">×</button>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+name: Update Bangalore gold rates
+
+# Scrapes GoodReturns (server-side, no CORS) a few times a day, updates the
+# committed JSON the PWA reads, and accumulates daily history over time.
+# Free: runs on GitHub-hosted runners, commits back to the repo.
+
+on:
+  schedule:
+    # Times in UTC. IST = UTC+5:30. Covers ~9:30 AM to ~9:00 PM IST.
+    - cron: "0 4,7,10,13,15 * * *"
+  workflow_dispatch: {}   # run manually from the Actions tab any time
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gold-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Fetch latest gold rates
+        run: node scripts/gold/fetch-gold.js
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "gold-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if [ -n "$(git status --porcelain docs/data/gold)" ]; then
+            git add docs/data/gold
+            git commit -m "chore(gold): update Bangalore rates $(date -u +'%Y-%m-%d %H:%M UTC')"
+            # retry push in case of a race with a concurrent run
+            for i in 1 2 3 4; do
+              if git push; then break; fi
+              git pull --rebase --autostash || true
+              sleep $((i*2))
+            done
+          else
+            echo "No change in rates."
+          fi
