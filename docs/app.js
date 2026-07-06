@@ -2,8 +2,12 @@
 /* Bangalore Gold PWA — reads committed JSON (official GoodReturns rates) and
    optionally overlays a live intraday estimate from international spot. */
 
-const DATA_BASE = './data/gold/';
-const REFRESH_MS = 5 * 60 * 1000;       // re-pull committed JSON every 5 min
+// Prefer the repo's RAW file: it reflects new rates the instant the updater
+// commits, with no dependency on a Pages rebuild. Fall back to the local copy
+// served alongside the app (also what the service worker caches for offline).
+const RAW_BASE = 'https://raw.githubusercontent.com/AkashAvru/Bangalore-gold/main/docs/data/gold/';
+const LOCAL_BASE = './data/gold/';
+const REFRESH_MS = 5 * 60 * 1000;       // re-pull data every 5 min
 const STALE_HOURS = 20;                  // official data older than this = "stale" dot
 
 const state = {
@@ -24,7 +28,12 @@ const arrow = (n) => (n > 0 ? '▲' : n < 0 ? '▼' : '•');
 const unitMul = () => (state.unit === '10' ? 10 : 1);
 
 async function getJSON(name) {
-  const res = await fetch(DATA_BASE + name + '?t=' + Date.now(), { cache: 'no-store' });
+  const bust = '?t=' + Date.now();
+  try {
+    const r = await fetch(RAW_BASE + name + bust, { cache: 'no-store' });
+    if (r.ok) return await r.json();
+  } catch (e) { /* offline or blocked — fall through to local copy */ }
+  const res = await fetch(LOCAL_BASE + name + bust, { cache: 'no-store' });
   if (!res.ok) throw new Error(name + ' ' + res.status);
   return res.json();
 }
@@ -175,7 +184,7 @@ function renderChart() {
   area = line + 'L' + x(n - 1).toFixed(1) + ' ' + (CHART_H - PAD_B) + ' L' + x(0).toFixed(1) + ' ' + (CHART_H - PAD_B) + ' Z';
 
   const up = vals[n - 1] >= vals[0];
-  const stroke = up ? '#e8b64b' : '#ff8a5c';
+  const stroke = up ? '#34d399' : '#fb7185';
   const lastX = x(n - 1), lastY = y(vals[n - 1]);
 
   svg.innerHTML =

@@ -2,7 +2,7 @@
    - App shell (html/css/js/icons): cache-first, updated in background.
    - Data JSON: network-first so the latest committed rates show when online,
      falling back to the last cached copy when offline. */
-const VERSION = 'gold-v1';
+const VERSION = 'gold-v2';
 const SHELL = `shell-${VERSION}`;
 const DATA = `data-${VERSION}`;
 
