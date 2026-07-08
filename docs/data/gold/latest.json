@@ -4,15 +4,15 @@
   "city": "Bangalore",
   "unit": "inr_per_gram",
   "date": "2026-07-08",
-  "updatedAt": "2026-07-08T06:21:00.095Z",
+  "updatedAt": "2026-07-08T09:20:03.817Z",
   "gold_24k": 14449,
   "gold_22k": 13245,
   "delta_24k": -77,
   "delta_22k": -70,
   "spot": {
-    "xau_usd": 4131.2,
+    "xau_usd": 4059.3,
     "usd_inr": 95.05,
-    "gold_24k_spot_inr_g": 12624.32,
-    "updatedAt": "2026-07-08T06:20:48Z"
+    "gold_24k_spot_inr_g": 12404.61,
+    "updatedAt": "2026-07-08T09:19:49Z"
   }
 }
