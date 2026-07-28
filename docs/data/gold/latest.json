@@ -3,11 +3,16 @@
   "sourceUrl": "https://www.goodreturns.in/gold-rates/bangalore.html",
   "city": "Bangalore",
   "unit": "inr_per_gram",
-  "date": "2026-07-27",
-  "updatedAt": "2026-07-27T15:35:49.552Z",
-  "gold_24k": 14589,
-  "gold_22k": 13370,
-  "delta_24k": 96,
-  "delta_22k": 85,
-  "spot": null
+  "date": "2026-07-28",
+  "updatedAt": "2026-07-28T06:17:36.789Z",
+  "gold_24k": 14417,
+  "gold_22k": 13215,
+  "delta_24k": -172,
+  "delta_22k": -155,
+  "spot": {
+    "xau_usd": 4047.3,
+    "usd_inr": 95.94,
+    "gold_24k_spot_inr_g": 12483.81,
+    "updatedAt": "2026-07-28T06:17:10Z"
+  }
 }
